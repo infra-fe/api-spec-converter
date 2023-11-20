@@ -1,6 +1,6 @@
 {
-  "name": "api-spec-converter",
-  "version": "2.12.0",
+  "name": "@shopee/api-spec-converter",
+  "version": "3.0.0",
   "engines": {
     "node": ">=6.0.0"
   },
