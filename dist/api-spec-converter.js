@@ -585,6 +585,8 @@ Converter.prototype.copySchemaXProperties = function (obj) {
 };
 
 Converter.prototype.convertSchemaSpecialProperties = function (obj, fields) {
+  var schema = this.resolveReference(this.spec, obj.schema, true);
+  if (!schema) return;
   if (Array.isArray(fields)) {
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
@@ -594,8 +596,8 @@ Converter.prototype.convertSchemaSpecialProperties = function (obj, fields) {
       for (var _iterator2 = fields[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         var field = _step2.value;
 
-        if (obj[field] !== undefined) {
-          obj['x-' + field] = obj[field];
+        if (schema[field] !== undefined) {
+          obj['x-' + field] = schema[field];
         }
       }
     } catch (err) {
