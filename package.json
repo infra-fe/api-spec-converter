@@ -9,8 +9,8 @@
   "scripts": {
     "browserify": "node node_modules/mkdirp/bin/cmd dist && browserify -s APISpecConverter -o dist/api-spec-converter.js .",
     "test": "mocha && npm run browserify && karma start --single-run && git checkout -- dist",
-    "publish:test": "npm run browserify && npm version prerelease --preid test && npm publish --tag=test",
-    "publish:release": "npm run browserify && npm version patch && npm publish"
+    "publish:test": "npm version prerelease --preid test && npm publish --tag=test",
+    "publish:release": "npm version patch && npm publish"
   },
   "repository": {
     "type": "git",

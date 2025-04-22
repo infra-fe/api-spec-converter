@@ -193,6 +193,8 @@ var HTTP_METHODS = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 
     SCHEMA_PROPERTIES = ['format', 'minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum', 'minLength', 'maxLength', 'multipleOf', 'minItems', 'maxItems', 'uniqueItems', 'minProperties', 'maxProperties', 'additionalProperties', 'pattern', 'enum', 'default'],
     ARRAY_PROPERTIES = ['type', 'items'];
 
+var SPECIAL_PROPERTIES = ['nullable', 'deprecated'];
+
 var APPLICATION_JSON_REGEX = /^(application\/json|[^;\/ \t]+\/[^;\/ \t]+[+]json)[ \t]*(;.*)?$/;
 var SUPPORTED_MIME_TYPES = {
   APPLICATION_X_WWW_URLENCODED: 'application/x-www-form-urlencoded',
@@ -507,6 +509,7 @@ Converter.prototype.convertParameters = function (obj) {
       _this2.copySchemaProperties(param, SCHEMA_PROPERTIES);
       _this2.copySchemaProperties(param, ARRAY_PROPERTIES);
       _this2.copySchemaXProperties(param);
+      _this2.convertSchemaSpecialProperties(param, SPECIAL_PROPERTIES);
       if (!param.description) {
         var _schema = _this2.resolveReference(_this2.spec, param.schema, false);
         if (!!_schema && _schema.description) {
@@ -577,6 +580,37 @@ Converter.prototype.copySchemaXProperties = function (obj) {
   for (var propName in schema) {
     if (hasOwnProperty.call(schema, propName) && !hasOwnProperty.call(obj, propName) && propName.startsWith('x-')) {
       obj[propName] = schema[propName];
+    }
+  }
+};
+
+Converter.prototype.convertSchemaSpecialProperties = function (obj, fields) {
+  if (Array.isArray(fields)) {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = fields[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var field = _step2.value;
+
+        if (obj[field] !== undefined) {
+          obj['x-' + field] = obj[field];
+        }
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
     }
   }
 };
